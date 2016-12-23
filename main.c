@@ -45,8 +45,7 @@ void loop() { // this is the main program that keeps looping over and over
 	buttonState = digitalRead(buttonPin);
 
 	if (buttonState == HIGH) {
-		buttoncounter++; // adds 1 to the value of buttoncounter
-		RPSval = buttoncounter % 4; // divides buttoncounter value by 4 and takes the remainder and sets it as the RPSval
+		RPSval = random(4);
 
 		firstSection(); // runs the program above that plays the muzak
 		digitalWrite(scissorPin, LOW); // makes sure all the lights are off after the muzak plays
@@ -54,32 +53,33 @@ void loop() { // this is the main program that keeps looping over and over
 		digitalWrite(rockPin,    LOW);
 	}
 
-	if (RPSval == 0) { // if the RPSval is divisible by 4 exactly there is 0 remainder and the robo-shambo shows scissors
-		digitalWrite(scissorPin, HIGH);
-		digitalWrite(paperPin,   LOW);
-		digitalWrite(rockPin,    LOW);
-	}
-
-	if (RPSval == 1) { // if the RPSval is disible by 4 with 1 remaining the robo-shambo shows scissors
-		digitalWrite(scissorPin, HIGH);
-		digitalWrite(paperPin,   LOW);
-		digitalWrite(rockPin,    LOW);
-	}
-
-	if (RPSval == 2) {// if the RPSval is disible by 4 with 2 remaining the robo-shambo shows rock
-		digitalWrite(rockPin,    HIGH);
-		digitalWrite(paperPin,   LOW);
-		digitalWrite(scissorPin, LOW);
-	}
-
-	if (RPSval == 3) { // if the RPSval is disible by 4 with 3 remaining the robo-shambo shows paper
-		digitalWrite(paperPin,   HIGH);
-		digitalWrite(scissorPin, LOW);
-		digitalWrite(rockPin,    LOW);
+	switch (RPSval) {
+		case 0:
+			digitalWrite(scissorPin, HIGH);
+			digitalWrite(paperPin, LOW);
+			digitalWrite(rockPin, LOW);
+			break;
+		case 1:
+			digitalWrite(scissorPin, HIGH);
+			digitalWrite(paperPin, LOW);
+			digitalWrite(rockPin, LOW);
+			break;
+		case 2:
+			digitalWrite(rockPin, HIGH);
+			digitalWrite(paperPin, LOW);
+			digitalWrite(scissorPin, LOW);
+			break;
+		case 3:
+			digitalWrite(paperPin, HIGH);
+			digitalWrite(scissorPin, LOW);
+			digitalWrite(rockPin, LOW);
+			break;
 	}
 }
 
 void setup() {
+	// Seeds the randomizer based on initial state
+	randomSeed(analogRead(0));
 	// initialize the LED pin as outputs or inputs:
 	pinMode(speakerPin, OUTPUT);
 	pinMode(rockPin,    OUTPUT);
@@ -91,26 +91,28 @@ void setup() {
 void beep(int note, int duration) { // sub program that the main progam calls on to make muzak
 	tone(speakerPin, note, duration); // tell the microcontroller to output a PWM signal on pin P0 set to whatever value 'note' is set to for however long 'duration' is set to
 
-	if (counter % 3 == 0) { // this makes the lights turn on in time to the muzak
-		digitalWrite(rockPin, HIGH);
-		delay(duration);
-		digitalWrite(rockPin, LOW);
-	}
-	if (counter % 3 == 1) {
-		digitalWrite(scissorPin, HIGH);
-		delay(duration);
-		digitalWrite(scissorPin, LOW);
-	}
-	if (counter % 3 == 2) {
-		digitalWrite(paperPin, HIGH);
-		delay(duration);
-		digitalWrite(paperPin, LOW);
+	counter = random(3);
+	switch (counter) {
+		case 0:
+			digitalWrite(rockPin, HIGH);
+			delay(duration);
+			digitalWrite(rockPin, LOW);
+			break;
+		case 1:
+			digitalWrite(scissorPin, HIGH);
+			delay(duration);
+			digitalWrite(scissorPin, LOW);
+			break;
+		case 2:
+			digitalWrite(paperPin, HIGH);
+			delay(duration);
+			digitalWrite(paperPin, LOW);
+			break;
 	}
 
 	//Stop tone on buzzerPin
 	noTone(speakerPin);
 	delay(50);
-	counter++;
 }
 
 void firstSection() { // this is the first little ditty of the Star Wars Imperial March
