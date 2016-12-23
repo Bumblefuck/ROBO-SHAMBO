@@ -37,7 +37,6 @@ int buttonState = 0;         // variable for reading the pushbutton status
 int RPSval = 0; // variable for storing the button state modulo as to display canned rock paper scissor routine
 
 
-
 void setup() {
   // initialize the LED pin as outputs or inputs:
   pinMode(speakerPin, OUTPUT);
@@ -115,7 +114,7 @@ void loop() { // this is the main program that keeps looping over and over
   // check if the pushbutton is pressed.
   // if it is, the buttonState is HIGH:
   if (buttonState == HIGH) {
-    buttoncounter ++; // adds 1 to the value of buttoncounter
+    buttoncounter = random(3); //Randomly choose a number between 0 - 3
     RPSval = buttoncounter % 4; // divides buttoncounter value by 4 and takes the remainder and sets it as the RPSval
     firstSection(); // runs the program above that plays the muzak
     digitalWrite(scissorPin, LOW); // makes sure all the lights are off after the muzak plays
@@ -123,30 +122,25 @@ void loop() { // this is the main program that keeps looping over and over
     digitalWrite(rockPin, LOW);
   }
 
-
-  if (RPSval == 0) { // if the RPSval is divisible by 4 exactly there is 0 remainder and the robo-shambo shows scissors
+  switch (buttonState) {
+  case 0:
+    //Scissors
     digitalWrite(scissorPin, HIGH);
     digitalWrite(paperPin, LOW);
     digitalWrite(rockPin, LOW);
-
-  }
-  if (RPSval == 1) { // if the RPSval is disible by 4 with 1 remaining the robo-shambo shows scissors
-    digitalWrite(scissorPin, HIGH);
-    digitalWrite(paperPin, LOW);
-    digitalWrite(rockPin, LOW);
-
-  }
-  if (RPSval == 2) {// if the RPSval is disible by 4 with 2 remaining the robo-shambo shows rock
+    break;
+  case 1:
+    //rock
     digitalWrite(rockPin, HIGH);
     digitalWrite(paperPin, LOW);
     digitalWrite(scissorPin, LOW);
-
-  }
-  if (RPSval == 3) { // if the RPSval is disible by 4 with 3 remaining the robo-shambo shows paper
+    break;
+  case 2:
+    //paper
     digitalWrite(paperPin, HIGH);
     digitalWrite(scissorPin, LOW);
     digitalWrite(rockPin, LOW);
-
+    break;
   }
 
 
